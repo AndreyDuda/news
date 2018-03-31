@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeNewsTable extends Migration
+class CreateMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class ChangeNewsTable extends Migration
      */
     public function up()
     {
-        Schema::table('news', function (Blueprint $table) {
-            //
-            $table->integer('id_user')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
+        Schema::create('menus', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 50);
+            $table->string('url',255);
+            $table->timestamps();
         });
     }
 
@@ -27,8 +28,6 @@ class ChangeNewsTable extends Migration
      */
     public function down()
     {
-        Schema::table('news', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('menus');
     }
 }

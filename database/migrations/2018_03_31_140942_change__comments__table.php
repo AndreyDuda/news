@@ -15,7 +15,7 @@ class ChangeCommentsTable extends Migration
     {
         Schema::table('comments', function (Blueprint $table) {
             $table->integer('id_user')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users');
 
             $table->integer('id_news')->unsigned();
             $table->foreign('id_news')->references('id')->on('news');

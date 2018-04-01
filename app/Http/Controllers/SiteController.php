@@ -11,6 +11,7 @@ class SiteController extends Controller
     protected $news_rep;
     protected $menu_rep;
     protected $user_rep;
+    protected $comment_rep;
 
     protected $vars = array();
     protected $template;

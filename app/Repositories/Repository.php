@@ -21,11 +21,21 @@ abstract class Repository
 
     }
 
+
+
     public function getOne($id)
     {
         $result = $this->model->where('id', $id)->limit(1);
 
         return $result->get();
 
+    }
+
+    public function add($input)
+    {
+        $model = new $this->model;
+        $model->fill($input);
+        $model->save();
+        return $model;
     }
 }

@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Menu;
 use App\Repositories\MenusRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Repositories\NewsRepository;
 
 class IndexController extends SiteController
 {
-    public function __construct(NewsRepository $news_rep)
+    public function __construct(NewsRepository $news_rep, UserRepository $user_rep)
     {
         parent::__construct(new MenusRepository(new Menu));
-
+        $this->user_rep = $user_rep;
         $this->news_rep = $news_rep;
         $this->template = env('THEME') . '.index';
     }
@@ -24,12 +25,22 @@ class IndexController extends SiteController
      */
     public function index()
     {
-        //
-        $news = $this->news_rep->get();
-        $content = view(env('THEME') . '.content')->with('news', $news)->render();
+            $news = $this->news_rep->get();
+            $content = view(env('THEME') . '.content')->with('news', $news)->render();
+            $this->vars = array_add($this->vars, 'content', $content);
+
+            return $this->renderOutput();
+    }
+
+    public function home()
+    {
+        $user_id  = \Auth::user()->id;
+        $news = $this->news_rep->getUser($user_id );
+        $content = view(env('THEME') . '.home')->with('news', $news)->render();
         $this->vars = array_add($this->vars, 'content', $content);
 
         return $this->renderOutput();
+
     }
 
     /**
@@ -50,7 +61,37 @@ class IndexController extends SiteController
      */
     public function store(Request $request)
     {
-        //
+
+       //auth()->guard()->check())/
+        $id_user = \Auth::user()->id;
+            if($request->isMethod('post')){
+                $input = $request->except('_token');
+                $input = array_add($input, 'id_user', $id_user );
+                $validator = $this->news_rep->validator($input);
+                if($validator->fails()){
+
+                    return redirect()->route('add')->withErrors($validator)->withInput();
+                }else{
+                    $this->news_rep->add($input);
+                    return redirect()->route('add')->with('status', 'Новость добавлена');
+                }
+
+
+                //return redirect()->intended(route('oneNews', ['id' => 1]));
+            }
+            else{
+                $content = view(env('THEME') . '.homeAdd')->render();
+                $this->vars = array_add($this->vars, 'content', $content);
+
+                return $this->renderOutput();
+
+            }
+
+
+            //return redirect()->intended('login');
+
+
+
     }
 
     /**
@@ -64,6 +105,16 @@ class IndexController extends SiteController
         //
         $news = $this->news_rep->getOne($id);
         $content = view(env('THEME') . '.content_one')->with('news', $news)->render();
+        $this->vars = array_add($this->vars, 'content', $content);
+
+        return $this->renderOutput();
+    }
+
+    public function user()
+    {
+        $id = \Auth::user()->id;
+        $user = $this->user_rep->getOne($id);
+        $content = view(env('THEME') . '.user')->with('user', $user)->render();
         $this->vars = array_add($this->vars, 'content', $content);
 
         return $this->renderOutput();

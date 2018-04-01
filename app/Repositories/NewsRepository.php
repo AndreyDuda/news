@@ -9,11 +9,29 @@
 namespace App\Repositories;
 
 use App\News;
+use Validator;
 
 class NewsRepository extends Repository
 {
     public function __construct(News $news)
     {
         $this->model = $news;
+    }
+    public function validator($input)
+    {
+        $validator = Validator::make($input, [
+            'title'   => 'required|max:120',
+            'desc'    => 'required|min:1'
+        ]);
+
+        return $validator;
+    }
+
+    public function getUser($id)
+    {
+        $builder = $this->model->where('id_user', $id);
+
+        return $builder->get();
+
     }
 }

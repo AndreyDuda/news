@@ -14,8 +14,19 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::get('/', 'IndexController@index');
-Route::get('news/{id}', 'IndexController@show');
+Route::get('/', ['uses' => 'IndexController@index', 'as' => 'index']);
+Route::get('news/{id}', ['uses' => 'IndexController@show', 'as' => 'oneNews']);
+Route::post('comment', ['uses' => 'IndexController@addComment', 'as' => 'addComment'])->middleware('auth');
+
+
+
+
+
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix' => 'home', 'middleware' => 'auth'], function(){
+    Route::get('/', 'IndexController@home')->name('home');
+    Route::get('/user', 'IndexController@user')->name('userInfo');
+    Route::get('/add', 'IndexController@store')->name('add');
+    Route::post('/add', 'IndexController@store')->name('postAdd');
+});

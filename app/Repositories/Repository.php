@@ -17,7 +17,15 @@ abstract class Repository
     {
         $builder = $this->model->select('*');
 
-        return $builder;
+        return $builder->get();
+
+    }
+
+    public function getOne($id)
+    {
+        $result = $this->model->where('id', $id)->limit(1);
+
+        return $result->get();
 
     }
 }

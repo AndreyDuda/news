@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Menu;
+use App\Repositories\CommentRepository;
 use App\Repositories\MenusRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -10,11 +11,12 @@ use App\Repositories\NewsRepository;
 
 class IndexController extends SiteController
 {
-    public function __construct(NewsRepository $news_rep, UserRepository $user_rep)
+    public function __construct(NewsRepository $news_rep, UserRepository $user_rep, CommentRepository $comment_rep)
     {
         parent::__construct(new MenusRepository(new Menu));
         $this->user_rep = $user_rep;
         $this->news_rep = $news_rep;
+        $this->comment_rep = $comment_rep;
         $this->template = env('THEME') . '.index';
     }
 
@@ -78,20 +80,35 @@ class IndexController extends SiteController
 
 
                 //return redirect()->intended(route('oneNews', ['id' => 1]));
-            }
-            else{
+            }else{
                 $content = view(env('THEME') . '.homeAdd')->render();
                 $this->vars = array_add($this->vars, 'content', $content);
 
                 return $this->renderOutput();
 
             }
-
-
             //return redirect()->intended('login');
+    }
 
+    public function addComment(Request $request)
+    {
+        $id_user = \Auth::user()->id;
 
+        if($request->isMethod('post')){
+            $input = $request->except('_token');
+            $input = array_add($input, 'id_user', $id_user );
+            $validator = $this->comment_rep->validator($input);
+/*dd($input);*/
+            if($validator->fails()){
+                return redirect()->route('oneNews', ['id' => $request->id_news])->withErrors($validator)->withInput();
+            }else{
+                $this->comment_rep->add($input);
+                return redirect()->route('oneNews', ['id' => $request->id_news])->with('status', 'Новость добавлена');
+            }
+        }else{
+            return redirect()->route('oneNews', ['id' => $request->id_news]);
 
+        }
     }
 
     /**
@@ -104,7 +121,8 @@ class IndexController extends SiteController
     {
         //
         $news = $this->news_rep->getOne($id);
-        $content = view(env('THEME') . '.content_one')->with('news', $news)->render();
+        $comments = $this->comment_rep->getNews($id);
+        $content = view(env('THEME') . '.content_one')->with(['news'=> $news, 'comments' => $comments])->render();
         $this->vars = array_add($this->vars, 'content', $content);
 
         return $this->renderOutput();

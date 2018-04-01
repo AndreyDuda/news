@@ -21,8 +21,6 @@ abstract class Repository
 
     }
 
-
-
     public function getOne($id)
     {
         $result = $this->model->where('id', $id)->limit(1);

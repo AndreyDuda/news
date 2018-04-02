@@ -6,7 +6,7 @@ $factory->define(App\News::class, function (Faker $faker) {
     return [
         'title'   => $faker->text(120),
         'desc'    => $faker->text(1500),
-        'id_user' => 1
+        'user_id' => 1
 
     ];
 });

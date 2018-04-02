@@ -10,12 +10,17 @@ class News extends Model
     protected $table = 'news';
 
     protected $fillable = [
-        'title', 'desc', 'id_user',
+        'title', 'desc', 'user_id',
     ];
 
     public function user()
     {
-        return $this->hasOne('App\User', 'id', 'id_user');
+        return $this->hasOne('App\User', 'id', 'user_id');
     }
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+
 
 }

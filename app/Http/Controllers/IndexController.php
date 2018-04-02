@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Menu;
+
 use App\Repositories\CommentRepository;
 use App\Repositories\MenusRepository;
 use App\Repositories\UserRepository;
@@ -13,7 +13,7 @@ class IndexController extends SiteController
 {
     public function __construct(NewsRepository $news_rep, UserRepository $user_rep, CommentRepository $comment_rep)
     {
-        parent::__construct(new MenusRepository(new Menu));
+
         $this->user_rep = $user_rep;
         $this->news_rep = $news_rep;
         $this->comment_rep = $comment_rep;
@@ -65,10 +65,10 @@ class IndexController extends SiteController
     {
 
        //auth()->guard()->check())/
-        $id_user = \Auth::user()->id;
+        $user_id = \Auth::user()->id;
             if($request->isMethod('post')){
                 $input = $request->except('_token');
-                $input = array_add($input, 'id_user', $id_user );
+                $input = array_add($input, 'user_id', $user_id );
                 $validator = $this->news_rep->validator($input);
                 if($validator->fails()){
 
@@ -92,21 +92,21 @@ class IndexController extends SiteController
 
     public function addComment(Request $request)
     {
-        $id_user = \Auth::user()->id;
+        $user_id = \Auth::user()->id;
 
         if($request->isMethod('post')){
             $input = $request->except('_token');
-            $input = array_add($input, 'id_user', $id_user );
+            $input = array_add($input, 'user_id', $user_id );
             $validator = $this->comment_rep->validator($input);
 /*dd($input);*/
             if($validator->fails()){
-                return redirect()->route('oneNews', ['id' => $request->id_news])->withErrors($validator)->withInput();
+                return redirect()->route('oneNews', ['id' => $request->news_id])->withErrors($validator)->withInput();
             }else{
                 $this->comment_rep->add($input);
-                return redirect()->route('oneNews', ['id' => $request->id_news])->with('status', 'Новость добавлена');
+                return redirect()->route('oneNews', ['id' => $request->news_id])->with('status', 'Новость добавлена');
             }
         }else{
-            return redirect()->route('oneNews', ['id' => $request->id_news]);
+            return redirect()->route('oneNews', ['id' => $request->news_id]);
 
         }
     }
@@ -121,8 +121,8 @@ class IndexController extends SiteController
     {
         //
         $news = $this->news_rep->getOne($id);
-        $comments = $this->comment_rep->getNews($id);
-        $content = view(env('THEME') . '.content_one')->with(['news'=> $news, 'comments' => $comments])->render();
+
+        $content = view(env('THEME') . '.content_one')->with(['news'=> $news])->render();
         $this->vars = array_add($this->vars, 'content', $content);
 
         return $this->renderOutput();
@@ -132,11 +132,18 @@ class IndexController extends SiteController
     {
         $id = \Auth::user()->id;
         $user = $this->user_rep->getOne($id);
+
         $content = view(env('THEME') . '.user')->with('user', $user)->render();
         $this->vars = array_add($this->vars, 'content', $content);
 
         return $this->renderOutput();
     }
+
+    public function folover()
+    {
+        print_r('asdasdas');
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -169,7 +176,7 @@ class IndexController extends SiteController
      */
     public function destroy($id)
     {
-        //
+
     }
 
     public function getNews()

@@ -23,9 +23,9 @@ abstract class Repository
 
     public function getOne($id)
     {
-        $result = $this->model->where('id', $id)->limit(1);
+        $result = $this->model->where('id', $id)->first();
 
-        return $result->get();
+        return $result;
 
     }
 

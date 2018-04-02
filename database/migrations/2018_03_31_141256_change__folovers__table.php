@@ -15,11 +15,11 @@ class ChangeFoloversTable extends Migration
     {
         Schema::table('folovers', function (Blueprint $table) {
 
-            $table->integer('id_user')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
 
-            $table->integer('id_folover')->unsigned();
-            $table->foreign('id_folover')->references('id')->on('users');
+            $table->integer('folover_id')->unsigned();
+            $table->foreign('folover_id')->references('id')->on('users');
         });
     }
 

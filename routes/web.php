@@ -29,4 +29,5 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth'], function(){
     Route::get('/user', 'IndexController@user')->name('userInfo');
     Route::get('/add', 'IndexController@store')->name('add');
     Route::post('/add', 'IndexController@store')->name('postAdd');
+    Route::post('/', 'IndexController@folover');
 });

@@ -20,7 +20,7 @@ class CommentRepository extends Repository
 
     public function getNews($id)
     {
-        $builder = $this->model->where('id_news', $id);
+        $builder = $this->model->where('news_id', $id);
 
         return $builder->get();
 

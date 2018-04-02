@@ -29,7 +29,7 @@ class NewsRepository extends Repository
 
     public function getUser($id)
     {
-        $builder = $this->model->where('id_user', $id);
+        $builder = $this->model->where('user_id', $id);
 
         return $builder->get();
 

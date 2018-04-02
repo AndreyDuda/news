@@ -16,14 +16,13 @@ class SiteController extends Controller
     protected $vars = array();
     protected $template;
 
-    public function __construct(MenusRepository $menu_rep)
+    public function __construct()
     {
-        $this->menu_rep = $menu_rep;
+
     }
 
     public function renderOutput()
     {
-        $menus = $this->getMenu();
         $menus = view(env('THEME') . '.menu')->render();
         $this->vars = array_add($this->vars, 'menus', $menus);
 
@@ -31,10 +30,7 @@ class SiteController extends Controller
         return view($this->template)->with($this->vars);
     }
 
-    public function getMenu()
-    {
-        $menu = $this->menu_rep->get();
-    }
+
 
 
 }

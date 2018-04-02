@@ -15,8 +15,8 @@ class ChangeNewsTable extends Migration
     {
         Schema::table('news', function (Blueprint $table) {
             //
-            $table->integer('id_user')->unsigned();
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

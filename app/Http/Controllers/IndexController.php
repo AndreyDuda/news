@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 
 use App\Repositories\CommentRepository;
-use App\Repositories\MenusRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Repositories\NewsRepository;

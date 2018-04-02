@@ -61,7 +61,9 @@ class ResourceController extends SiteController
      */
     public function show($id)
     {
-        //
+        $news = $this->news_rep->getOne($id);
+
+        return new NewsResource($news);
     }
 
     /**

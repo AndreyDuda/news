@@ -10,6 +10,16 @@
         <br />
     </div>
 
+@if($news->user->id == \Auth::user()->id)
+    <form method="post" action="{{ route('delete') }}">
+        {{ csrf_field() }}
+        <input type="hidden" name="news_id" value="{{ $news->id}}">
+        <button type="submit">Удалить</button>
+    </form>
+
+
+
+@endif
 
 <h1>Комментарии</h1>
 

@@ -16,6 +16,7 @@
 });*/
 Route::get('/', ['uses' => 'IndexController@index', 'as' => 'index']);
 Route::get('news/{id}', ['uses' => 'IndexController@show', 'as' => 'oneNews']);
+Route::post('/news', ['uses' => 'IndexController@destroy', 'as' => 'delete'])->middleware('auth');
 Route::post('comment', ['uses' => 'IndexController@addComment', 'as' => 'addComment'])->middleware('auth');
 
 
@@ -29,5 +30,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth'], function(){
     Route::get('/user', 'IndexController@user')->name('userInfo');
     Route::get('/add', 'IndexController@store')->name('add');
     Route::post('/add', 'IndexController@store')->name('postAdd');
-    Route::post('/', 'IndexController@folover');
+    Route::get('/token', function () {
+        return Auth::user()->createToken(\Auth::user()->id);
+    })->name('token');
 });

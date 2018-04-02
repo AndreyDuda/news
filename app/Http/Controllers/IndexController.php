@@ -129,6 +129,7 @@ class IndexController extends SiteController
 
     public function user()
     {
+
         $id = \Auth::user()->id;
         $user = $this->user_rep->getOne($id);
 
@@ -173,9 +174,16 @@ class IndexController extends SiteController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = \Auth::user()->id;
+        $news = $this->news_rep->getOne($request->news_id);
+        if($request->isMethod('post') && $id  == $news->user->id) {
 
+            $news->forceDelete();
+        }
+
+        return redirect()->route('index')->with('status', 'Удалено');
     }
 
     public function getNews()

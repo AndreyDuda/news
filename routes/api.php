@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('news', 'ResourceController@index');
-Route::get('news/{id}', 'ResourceController@show');
+Route::get('news/{id}', 'ResourceController@show')->middleware('auth:api');;
 Route::post('news', 'ResourceController@store');
 

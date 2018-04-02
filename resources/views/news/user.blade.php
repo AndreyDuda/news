@@ -6,7 +6,10 @@
         <span style="text-align: center; font-weight: 900; font-size: 1.1em;"> {!! $user->email !!}</span><br />
         <span style="text-align: center; font-weight: 600; font-size: 1.1em;">Публикаций :</span>
         <span style="text-align: center; font-weight: 900; font-size: 1.1em;"> {!! count($user->news) !!}</span><br />
+        <span style="text-align: center; font-weight: 900; font-size: 1.1em;"><a href="{{ route('token') }}"><button type="submit">получит токет</button></a></span><br />
     </div>
+
+
 
 
 

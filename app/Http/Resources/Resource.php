@@ -24,4 +24,5 @@ class Resource extends MainResource
 
         ];
     }
+
 }

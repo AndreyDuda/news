@@ -143,6 +143,17 @@ class IndexController extends SiteController
     {
         print_r('asdasdas');
     }
+    public function email(Request $request)
+    {
+        if($request->isMethod('post') ) {
+
+            return redirect()->route('email')->with('status', 'Отправлено');
+        }
+        $content = view(env('THEME') . '.email')->render();
+        $this->vars = array_add($this->vars, 'content', $content);
+
+        return $this->renderOutput();
+    }
 
 
     /**

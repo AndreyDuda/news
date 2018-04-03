@@ -15,6 +15,8 @@
     return view('welcome');
 });*/
 Route::get('/', ['uses' => 'IndexController@index', 'as' => 'index']);
+Route::post('email', ['uses' => 'IndexController@email', 'as' => 'email']);
+Route::get('email', ['uses' => 'IndexController@email']);
 Route::get('news/{id}', ['uses' => 'IndexController@show', 'as' => 'oneNews']);
 Route::post('/news', ['uses' => 'IndexController@destroy', 'as' => 'delete'])->middleware('auth');
 Route::post('comment', ['uses' => 'IndexController@addComment', 'as' => 'addComment'])->middleware('auth');
